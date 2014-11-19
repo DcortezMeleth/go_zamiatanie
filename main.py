@@ -1,11 +1,13 @@
 # -*- coding: UTF-8 -*-
-from generator import Generator
-from structures import Stretch, Point
-
-__author__ = 'Bartosz'
-
 import sys
 import pickle
+
+from generator import Generator
+from structures import Stretch, Point
+from algorithms import SweepingAlgorithm
+
+
+__author__ = 'Bartosz'
 
 
 class Solver(object):
@@ -14,6 +16,7 @@ class Solver(object):
     def __init__(self):
         self._stretches = []
         self._generator = Generator()
+        self._algorithm = SweepingAlgorithm()
 
     def run(self):
         print "Remember to create or get account at the beginning. Usage:\n " \
@@ -22,7 +25,9 @@ class Solver(object):
               "set_generator_area <x1> <x2> <y1> <y2> - set area for stretches generator\n " \
               "generate_stretches <n> - generate n stretches\n " \
               "add_stretch <x1> <y1> <x2> <y2> - add stretch between 2 points\n " \
-              "clean - cleans list of stretches"
+              "clean - cleans list of stretches\n " \
+              "is_crossing - check if at least one crossing occurs\n " \
+              "find_crossings - find all crossing in given stretches set"
         while True:
             try:
                 read_text = raw_input()
@@ -41,7 +46,16 @@ class Solver(object):
         except Exception as e:
             print 'Error: occurred', e
 
-    def save_stretches(self, ):
+    def find_crossings(self):
+        self._algorithm.set_stretches(self._stretches)
+        self._algorithm.find_crossings()
+        return self._algorithm.get_result()
+
+    def is_crossing(self):
+        self._algorithm.set_stretches(self._stretches)
+        return self._algorithm.is_crossing()
+
+    def save_stretches(self):
         pickle.dump(self._stretches, self.FILE_NAME)
 
     def load_stretches(self):

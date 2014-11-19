@@ -2,11 +2,11 @@
 import random
 
 from structures import Point, Stretch
+
 __author__ = 'Bartosz'
 
 
 class Generator(object):
-
     def __init__(self, x1=0, x2=10, y1=0, y2=10):
         self._x1 = x1
         self._x2 = x2
