@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import sys
 import pickle
+import traceback
 
 from generator import Generator
 from structures import Stretch, Point
@@ -26,6 +27,7 @@ class Solver(object):
               "generate_stretches <n> - generate n stretches\n " \
               "add_stretch <x1> <y1> <x2> <y2> - add stretch between 2 points\n " \
               "clean - cleans list of stretches\n " \
+              "print_stretches - prints stretches\n " \
               "is_crossing - check if at least one crossing occurs\n " \
               "find_crossings - find all crossing in given stretches set"
         while True:
@@ -41,25 +43,31 @@ class Solver(object):
         try:
             handler = getattr(self, tokens[0])
             handler(*tokens[1:])
-        except AttributeError:
+        except AttributeError as e:
+            traceback.print_exc()
             print 'Wrong command name:', tokens[0]
         except Exception as e:
             print 'Error: occurred', e
 
+    def print_stretches(self):
+        for stretch in self._stretches:
+            print stretch
+
     def find_crossings(self):
         self._algorithm.set_stretches(self._stretches)
         self._algorithm.find_crossings()
-        return self._algorithm.get_result()
+        for elem in self._algorithm.get_result():
+            print elem
 
     def is_crossing(self):
         self._algorithm.set_stretches(self._stretches)
-        return self._algorithm.is_crossing()
+        print self._algorithm.is_crossing()
 
     def save_stretches(self):
-        pickle.dump(self._stretches, self.FILE_NAME)
+        pickle.dump(self._stretches, open(self.FILE_NAME, 'wb'))
 
     def load_stretches(self):
-        self._stretches = pickle.load(self.FILE_NAME)
+        self._stretches = pickle.load(open(self.FILE_NAME, 'rb'))
 
     def set_generator_area(self, x1, x2, y1, y2):
         self._generator.init_area(x1, x2, y1, y2)

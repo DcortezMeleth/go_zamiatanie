@@ -11,8 +11,15 @@ __author__ = 'Bartosz'
 
 # Method checks if 2 stretches are crossing.
 def is_crossing(s1, s2):
+    print '{0}, {1}'.format(s1, s2)
+    print s1.get_params()
+    print s2.get_params()
+
     a = [s1.get_params()[0], s2.get_params()[0]]
     b = [s1.get_params()[1], s2.get_params()[1]]
+
+    print a
+    print b
 
     try:
         result = numpy.linalg.solve(a, b)
