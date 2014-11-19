@@ -23,10 +23,18 @@ def is_crossing(s1, s2):
 
 
 class SweepingAlgorithm(object):
+
     def __init__(self, stretches):
         self._stretches = stretches
         self._result = []
 
     def run(self):
         for pair in combinations(self._stretches, 2):
-            is_crossing(*pair)
+            if is_crossing(*pair) is not None:
+                return True
+        return False
+
+class UltimateSweepingAlgorithm(SweepingAlgorithm):
+
+    def __init__(self, stretches):
+        
