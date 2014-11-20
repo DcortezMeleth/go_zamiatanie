@@ -43,7 +43,7 @@ class Solver(object):
         try:
             handler = getattr(self, tokens[0])
             handler(*tokens[1:])
-        except AttributeError as e:
+        except AttributeError:
             traceback.print_exc()
             print 'Wrong command name:', tokens[0]
         except Exception as e:
@@ -70,13 +70,13 @@ class Solver(object):
         self._stretches = pickle.load(open(self.FILE_NAME, 'rb'))
 
     def set_generator_area(self, x1, x2, y1, y2):
-        self._generator.init_area(x1, x2, y1, y2)
+        self._generator.init_area(float(x1), float(x2), float(y1), float(y2))
 
     def generate_stretches(self, n):
-        self._stretches = self._generator.generate_stretches(n)
+        self._stretches = self._generator.generate_stretches(int(n))
 
     def add_stretch(self, x1, y1, x2, y2):
-        self._stretches.append(Stretch(Point(x1, y1), Point(x2, y2)))
+        self._stretches.append(Stretch(Point(float(x1), float(y1)), Point(float(x2), float(y2))))
 
     def clean(self):
         self._stretches = []

@@ -40,4 +40,4 @@ class Stretch(object):
 
         # in result[0] there are a and b of our function equation
         result = la.solve(a1, b1)
-        return [[result[0], -1], result[1]]
+        return [[result[0], -1], -result[1]]
