@@ -80,7 +80,7 @@ class Solver(object):
     def load_stretches(self):
         self._stretches = pickle.load(open(self.FILE_NAME, 'rb'))
 
-    def set_generator_area(self, x1, x2, y1, y2):
+    def set_generator_area(self, x1, y1, x2, y2):
         self._generator.init_area(float(x1), float(x2), float(y1), float(y2))
 
     def generate_stretches(self, n):

@@ -29,3 +29,4 @@ class Generator(object):
         stretches = []
         for i in xrange(0, n):
             stretches.append(Stretch(self.generate_point(), self.generate_point()))
+        return stretches
