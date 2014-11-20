@@ -2,6 +2,7 @@
 import sys
 import pickle
 import traceback
+import json
 
 from generator import Generator
 from structures import Stretch, Point
@@ -72,7 +73,8 @@ class Solver(object):
         print self._algorithm.is_crossing()
 
     def save_result(self):
-        pickle.dump(self._algorithm.get_result(), open(self.RESULT_FILE_NAME, 'wb'))
+        json.dump(self._algorithm.get_result(), open(self.RESULT_FILE_NAME, 'wb'), indent=4, sort_keys=True,
+                  separators=(',', ': '), default=convert_to_builtin_type)
 
     def save_stretches(self):
         pickle.dump(self._stretches, open(self.FILE_NAME, 'wb'))
@@ -91,6 +93,15 @@ class Solver(object):
 
     def clean(self):
         self._stretches = []
+
+
+def convert_to_builtin_type(obj):
+    print 'default(', repr(obj), ')'
+    # Convert objects to a dictionary of their representation
+    d = {'__class__': obj.__class__.__name__,
+         '__module__': obj.__module__}
+    d.update(obj.__dict__)
+    return d
 
 
 if __name__ == '__main__':
