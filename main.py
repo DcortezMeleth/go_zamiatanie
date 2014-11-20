@@ -13,6 +13,20 @@ __author__ = 'Bartosz'
 
 class Solver(object):
     FILE_NAME = "stretches.dat"
+    RESULT_FILE_NAME = "result.dat"
+
+    help_str = "Program usage:\n " \
+               "save_stretches - save to file\n  " \
+               "load_stretches - load from file\n  " \
+               "set_generator_area <x1> <x2> <y1> <y2> - set area for stretches generator\n  " \
+               "generate_stretches <n> - generate n stretches\n  " \
+               "add_stretch <x1> <y1> <x2> <y2> - add stretch between 2 points\n  " \
+               "clean - cleans list of stretches\n  " \
+               "print_stretches - prints stretches\n  " \
+               "is_crossing - check if at least one crossing occurs\n  " \
+               "find_crossings - find all crossing in given stretches set\n  " \
+               "save_result - saves result to file\n  " \
+               "print_help - show program usage"
 
     def __init__(self):
         self._stretches = []
@@ -20,16 +34,7 @@ class Solver(object):
         self._algorithm = SweepingAlgorithm()
 
     def run(self):
-        print "Remember to create or get account at the beginning. Usage:\n " \
-              "save_stretches - save to file\n " \
-              "load_stretches - load from file\n " \
-              "set_generator_area <x1> <x2> <y1> <y2> - set area for stretches generator\n " \
-              "generate_stretches <n> - generate n stretches\n " \
-              "add_stretch <x1> <y1> <x2> <y2> - add stretch between 2 points\n " \
-              "clean - cleans list of stretches\n " \
-              "print_stretches - prints stretches\n " \
-              "is_crossing - check if at least one crossing occurs\n " \
-              "find_crossings - find all crossing in given stretches set"
+        print self.help_str
         while True:
             try:
                 read_text = raw_input()
@@ -49,6 +54,9 @@ class Solver(object):
         except Exception as e:
             print 'Error: occurred', e
 
+    def print_help(self):
+        print self.help_str
+
     def print_stretches(self):
         for stretch in self._stretches:
             print stretch
@@ -57,11 +65,14 @@ class Solver(object):
         self._algorithm.set_stretches(self._stretches)
         self._algorithm.find_crossings()
         for elem in self._algorithm.get_result():
-            print elem
+            print "Point: {0} Stretches: {1} {2}".format(*elem)
 
     def is_crossing(self):
         self._algorithm.set_stretches(self._stretches)
         print self._algorithm.is_crossing()
+
+    def save_result(self):
+        pickle.dump(self._algorithm.get_result(), open(self.RESULT_FILE_NAME, 'wb'))
 
     def save_stretches(self):
         pickle.dump(self._stretches, open(self.FILE_NAME, 'wb'))

@@ -4,8 +4,8 @@ go_zamiatanie
 Zadanie na projekt z przedmiotu Geometria Obliczeniowa. 
 Program pozwala na zdefiniowanie dowolnej liczby odcinków w przestrzeni 2D, a następnie wyszukiwanie ich przecięć.
 
-Whole app is written in python. It's using numpy and matplotlib libraries.
-To use this app, siply run _main.py_ file.
+Cała aplikacja została napisana w języku python. Wykorzystuje ona biblioteki numpy oraz matplotlib.
+Aby uruchomić aplikację należy odpalić plik _main.py_.
 
 ####Program usage:
 - save_stretches - save to file
@@ -17,3 +17,5 @@ To use this app, siply run _main.py_ file.
 - print_stretches - prints stretches
 - is_crossing - check if at least one crossing occurs
 - find_crossings - find all crossing in given stretches set
+- print_help - show program usage
+- save_result - saves result to file
