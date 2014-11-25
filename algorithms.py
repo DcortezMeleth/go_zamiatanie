@@ -4,7 +4,7 @@ from itertools import combinations
 import numpy.linalg
 from numpy.linalg import LinAlgError
 
-from structures import Point
+from structures import Point, BinaryTree
 
 __author__ = 'Bartosz'
 
@@ -24,29 +24,42 @@ def is_crossing(s1, s2):
 
 
 class SweepingAlgorithm(object):
-    def __init__(self, stretches=None):
-        if not stretches:
-            stretches = []
-        self._stretches = stretches
+    def __init__(self):
+        self._lines = []
+        self._points = []
+        self._broom = BinaryTree()
         self._result = []
 
     def is_crossing(self):
-        if self._result:
-            return True
-        for pair in combinations(self._stretches, 2):
-            if is_crossing(*pair):
-                return True
+        for point in self._points:
+            if point == point.line.left:
+                self._broom.insert(point)
+                s1 = self._broom.prev(point)
+                s2 = self._broom.next(point)
+                if s1 and is_crossing(point.line, s1.line):
+                    return True
+                if s2 and is_crossing(point.line, s2.line):
+                    return True
+            else:
+                s1 = self._broom.prev(point)
+                s2 = self._broom.next(point)
+                if s1 and s2 and is_crossing(s1.line, s2.line):
+                    return True
         return False
 
     def find_crossings(self):
         self._result = []
-        for pair in combinations(self._stretches, 2):
+        for pair in combinations(self._lines, 2):
             p = is_crossing(*pair)
             if p:
                 self._result.append([p, pair[0], pair[1]])
 
-    def set_stretches(self, stretches):
-        self._stretches = stretches
+    def set_lines(self, lines):
+        self._lines = lines
+        points = []
+        for line in lines:
+            points.extend([line.p1, line.p2])
+        self._points = sorted(points, key=lambda p: p.x)
 
     def get_result(self):
         return self._result

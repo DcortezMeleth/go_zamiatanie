@@ -84,13 +84,13 @@ class Solver(object):
             print stretch
 
     def find_crossings(self):
-        self._algorithm.set_stretches(self._stretches)
+        self._algorithm.set_lines(self._stretches)
         self._algorithm.find_crossings()
         for elem in self._algorithm.get_result():
             print "Point: {0} Stretches: {1} {2}".format(*elem)
 
     def is_crossing(self):
-        self._algorithm.set_stretches(self._stretches)
+        self._algorithm.set_lines(self._stretches)
         print self._algorithm.is_crossing()
 
     def save_result(self):
