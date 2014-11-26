@@ -5,15 +5,68 @@ import graphics
 __author__ = 'Bartosz'
 
 
+class Node(object):
+    def __init__(self, val):
+        self.val = val
+        self.right = None
+        self.left = None
+        self.parent = None
+
+    def is_lower(self, node):
+        return node.val.x > self.val.x
+
+    def is_higher(self, node):
+        return node.val.x < self.val.x
+
+    def is_equal(self, node):
+        return self.val.x == node.val.x and self.val.y == node.val.y
+
+
 class BinaryTree(object):
     def __init__(self):
-        pass
+        self._root = None
 
-    def insert(self, a):
-        pass
+    def insert(self, val):
+        node = Node(val)
+        if not self._root:
+            self._root = node
+            return
+        tmp = self._root
+        while True:
+            if node.is_lower(tmp):
+                if not tmp.left:
+                    node.parent = tmp
+                    tmp.left = node
+                    return
+                tmp = tmp.left
+            else:
+                if not tmp.right:
+                    node.parent = tmp
+                    tmp.right = node
+                    return
+                tmp = tmp.right
 
-    def remove(self, a):
-        pass
+    def remove(self, val):
+        node = Node(val)
+        tmp = self._root
+        while not tmp.is_equal(node):
+            if node.is_lower(tmp):
+                if not tmp.left:
+                    raise Exception("Elem not found!")
+                tmp = tmp.left
+            else:
+                if not tmp.right:
+                    raise Exception("Elem not found!")
+                tmp = tmp.right
+        #TODO:tu cos z tym zrobic!!!
+        if tmp.left:
+            tmp.left.parent = tmp.parent
+            tmp = tmp.left
+        elif tmp.right:
+            tmp.right.parent = tmp.parent
+            tmp = tmp.right
+        else:
+            tmp
 
     def next(self, a):
         pass
