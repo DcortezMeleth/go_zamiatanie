@@ -27,7 +27,9 @@ class Solver(object):
                "is_crossing - check if at least one crossing occurs\n  " \
                "find_crossings - find all crossing in given stretches set\n  " \
                "save_result - saves result to file\n  " \
-               "print_help - show program usage"
+               "print_help - show program usage\n  " \
+               "draw_stretches - draws stretches\n  " \
+               "draw_result - draws result of sweeping algorithm"
 
     def __init__(self):
         self._stretches = []
@@ -55,6 +57,26 @@ class Solver(object):
         except Exception as e:
             print 'Error: occurred', e
 
+    def draw_result(self):
+        win = graphics.GraphWin("go_zamiatanie", 800, 600)
+        for point in self._points:
+            point.draw(win)
+        for i in xrange(0, len(self._result)-1):
+            line = graphics.Line(self._result[i], self._result[i + 1])
+            line.draw(win)
+            win.getMouse()
+        line = graphics.Line(self._result[0], self._result[-1])
+        line.draw(win)
+        win.getMouse()
+        win.close()
+
+    def draw_stretches(self):
+        win = graphics.GraphWin("go_zamiatanie", 800, 600)
+        for point in self._points:
+            point.draw(win)
+        win.getMouse()
+        win.close()
+
     def print_help(self):
         print self.help_str
 
@@ -63,13 +85,13 @@ class Solver(object):
             print stretch
 
     def find_crossings(self):
-        self._algorithm.set_stretches(self._stretches)
+        self._algorithm.set_lines(self._stretches)
         self._algorithm.find_crossings()
         for elem in self._algorithm.get_result():
             print "Point: {0} Stretches: {1} {2}".format(*elem)
 
     def is_crossing(self):
-        self._algorithm.set_stretches(self._stretches)
+        self._algorithm.set_lines(self._stretches)
         print self._algorithm.is_crossing()
 
     def save_result(self):
@@ -82,7 +104,7 @@ class Solver(object):
     def load_stretches(self):
         self._stretches = pickle.load(open(self.FILE_NAME, 'rb'))
 
-    def set_generator_area(self, x1, x2, y1, y2):
+    def set_generator_area(self, x1, y1, x2, y2):
         self._generator.init_area(float(x1), float(x2), float(y1), float(y2))
 
     def generate_stretches(self, n):

@@ -19,3 +19,5 @@ Aby uruchomić aplikację należy odpalić plik _main.py_.
 - find_crossings - find all crossing in given stretches set
 - print_help - show program usage
 - save_result - saves result to file
+- draw_stretches - draws stretches
+- draw_result - draws result of sweeping algorithm
