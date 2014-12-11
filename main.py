@@ -87,7 +87,7 @@ class Solver(object):
 
     def is_crossing(self):
         self._algorithm.set_lines(self.lines)
-        print self._algorithm.is_crossing()
+        # print self._algorithm.is_crossing()
 
     def add_stretch(self, x1, y1, x2, y2):
         self.lines.append(Stretch(Point(float(x1), float(y1)), Point(float(x2), float(y2))))

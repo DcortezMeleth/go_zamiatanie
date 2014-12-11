@@ -10,7 +10,7 @@ __author__ = 'Bartosz'
 
 
 # Method checks if 2 stretches are crossing.
-def is_crossing(s1, s2):
+def are_crossing(s1, s2):
     a = [s1.get_params()[0], s2.get_params()[0]]
     b = [s1.get_params()[1], s2.get_params()[1]]
 
@@ -32,25 +32,27 @@ class SweepingAlgorithm(object):
 
     def is_crossing(self):
         for point in self._points:
-            if point == point.line.left:
-                self._broom.insert(point)
-                s1 = self._broom.prev(point)
-                s2 = self._broom.next(point)
-                if s1 and is_crossing(point.line, s1.line):
+            s = point.line
+            if point == s.left:
+                self._broom.insert(s)
+                s1 = self._broom.prev(s)
+                s2 = self._broom.next(s)
+                if s1 and are_crossing(s, s1):
                     return True
-                if s2 and is_crossing(point.line, s2.line):
+                if s2 and are_crossing(s, s2):
                     return True
             else:
-                s1 = self._broom.prev(point)
-                s2 = self._broom.next(point)
-                if s1 and s2 and is_crossing(s1.line, s2.line):
+                s1 = self._broom.prev(s)
+                s2 = self._broom.next(s)
+                if s1 and s2 and are_crossing(s1, s2):
                     return True
+                self._broom.remove(s)
         return False
 
     def find_crossings(self):
         self._result = []
         for pair in combinations(self._lines, 2):
-            p = is_crossing(*pair)
+            p = are_crossing(*pair)
             if p:
                 self._result.append([p, pair[0], pair[1]])
 
@@ -60,6 +62,8 @@ class SweepingAlgorithm(object):
         for line in lines:
             points.extend([line.p1, line.p2])
         self._points = sorted(points, key=lambda p: p.x)
+        for po in self._points:
+            print po, po.x, po.y
 
     def get_result(self):
         return self._result
