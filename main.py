@@ -3,9 +3,9 @@ import sys
 import pickle
 import traceback
 import json
+import graphics
+import structures
 
-from generator import Generator
-from structures import Stretch, Point
 from algorithms import SweepingAlgorithm
 
 
@@ -32,9 +32,8 @@ class Solver(object):
                "draw_result - draws result of sweeping algorithm"
 
     def __init__(self):
-        self._stretches = []
-        self._generator = Generator()
         self._algorithm = SweepingAlgorithm()
+        self.lines = []
 
     def run(self):
         print self.help_str
@@ -57,73 +56,47 @@ class Solver(object):
         except Exception as e:
             print 'Error: occurred', e
 
-    def draw_result(self):
-        win = graphics.GraphWin("go_zamiatanie", 800, 600)
-        for point in self._points:
-            point.draw(win)
-        for i in xrange(0, len(self._result)-1):
-            line = graphics.Line(self._result[i], self._result[i + 1])
+    def set_lines(self):
+        p1 = None
+        win = graphics.GraphWin("", 800, 600)
+        while win.isOpen():
+            point = win.getMouse()
+            point = structures.Point(point.x, point.y)
+            if p1:
+                p1.undraw()
+                line = structures.Line(p1, point)
+                self.lines.append(line)
+                p1 = None
+                line.draw(win)
+            else:
+                p1 = point
+                p1.draw(win)
+
+    def draw_lines(self):
+        win = graphics.GraphWin("", 800, 600)
+        for line in self.lines:
             line.draw(win)
-            win.getMouse()
-        line = graphics.Line(self._result[0], self._result[-1])
-        line.draw(win)
         win.getMouse()
         win.close()
-
-    def draw_stretches(self):
-        win = graphics.GraphWin("go_zamiatanie", 800, 600)
-        for point in self._points:
-            point.draw(win)
-        win.getMouse()
-        win.close()
-
-    def print_help(self):
-        print self.help_str
-
-    def print_stretches(self):
-        for stretch in self._stretches:
-            print stretch
 
     def find_crossings(self):
-        self._algorithm.set_lines(self._stretches)
+        self._algorithm.set_lines(self.lines)
         self._algorithm.find_crossings()
         for elem in self._algorithm.get_result():
             print "Point: {0} Stretches: {1} {2}".format(*elem)
 
     def is_crossing(self):
-        self._algorithm.set_lines(self._stretches)
+        self._algorithm.set_lines(self.lines)
         print self._algorithm.is_crossing()
 
-    def save_result(self):
-        json.dump(self._algorithm.get_result(), open(self.RESULT_FILE_NAME, 'wb'), indent=4, sort_keys=True,
-                  separators=(',', ': '), default=convert_to_builtin_type)
-
-    def save_stretches(self):
-        pickle.dump(self._stretches, open(self.FILE_NAME, 'wb'))
-
-    def load_stretches(self):
-        self._stretches = pickle.load(open(self.FILE_NAME, 'rb'))
-
-    def set_generator_area(self, x1, y1, x2, y2):
-        self._generator.init_area(float(x1), float(x2), float(y1), float(y2))
-
-    def generate_stretches(self, n):
-        self._stretches = self._generator.generate_stretches(int(n))
-
     def add_stretch(self, x1, y1, x2, y2):
-        self._stretches.append(Stretch(Point(float(x1), float(y1)), Point(float(x2), float(y2))))
+        self.lines.append(Stretch(Point(float(x1), float(y1)), Point(float(x2), float(y2))))
+
+    def help(self):
+        print self.help_str
 
     def clean(self):
-        self._stretches = []
-
-
-def convert_to_builtin_type(obj):
-    print 'default(', repr(obj), ')'
-    # Convert objects to a dictionary of their representation
-    d = {'__class__': obj.__class__.__name__,
-         '__module__': obj.__module__}
-    d.update(obj.__dict__)
-    return d
+        self.lines = []
 
 
 if __name__ == '__main__':

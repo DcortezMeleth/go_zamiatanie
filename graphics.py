@@ -217,7 +217,6 @@ class GraphWin(tk.Canvas):
     def _onKey(self, evnt):
         self.lastKey = evnt.keysym
 
-
     def setBackground(self, color):
         """Set background color of the window"""
         self.__checkOpen()
@@ -238,20 +237,16 @@ class GraphWin(tk.Canvas):
         self.master.destroy()
         self.__autoflush()
 
-
     def isClosed(self):
         return self.closed
 
-
     def isOpen(self):
         return not self.closed
-
 
     def __autoflush(self):
         if self.autoflush:
             _root.update()
 
-    
     def plot(self, x, y, color="black"):
         """Set pixel (x,y) to the given color"""
         self.__checkOpen()
