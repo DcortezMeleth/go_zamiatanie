@@ -3,6 +3,7 @@ import numpy.linalg as la
 import graphics
 
 __author__ = 'Bartosz'
+# TODO: Napisac na SO, dlaczego z tym Point tak dziwnie to dziala
 
 
 class Point(graphics.Point):
@@ -10,6 +11,7 @@ class Point(graphics.Point):
         graphics.Point.__init__(self, x, y)
         self.line = None
         self.side = None
+        self.swap = []
 
     def __str__(self):
         return '({0}, {1})'.format(self.x, self.y)
