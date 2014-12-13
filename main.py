@@ -16,20 +16,14 @@ class Solver(object):
     FILE_NAME = "stretches.dat"
     RESULT_FILE_NAME = "result.dat"
 
-    help_str = "Program usage:\n " \
-               "save_stretches - save to file\n  " \
-               "load_stretches - load from file\n  " \
-               "set_generator_area <x1> <x2> <y1> <y2> - set area for stretches generator\n  " \
-               "generate_stretches <n> - generate n stretches\n  " \
-               "add_stretch <x1> <y1> <x2> <y2> - add stretch between 2 points\n  " \
-               "clean - cleans list of stretches\n  " \
-               "print_stretches - prints stretches\n  " \
+    help_str = "Program usage:\n  " \
+               "set_lines - set lines for solver\n  " \
                "is_crossing - check if at least one crossing occurs\n  " \
-               "find_crossings - find all crossing in given stretches set\n  " \
-               "save_result - saves result to file\n  " \
-               "print_help - show program usage\n  " \
-               "draw_stretches - draws stretches\n  " \
-               "draw_result - draws result of sweeping algorithm"
+               "find_crossings - find all crossing in given lines set\n  " \
+               "draw_lines - draws lines\n  " \
+               "print_lines - prints lines\n  " \
+               "clean - cleans list of lines\n  " \
+               "help - print program usage"
 
     def __init__(self):
         self._algorithm = SweepingAlgorithm()
@@ -79,6 +73,10 @@ class Solver(object):
         win.getMouse()
         win.close()
 
+    def print_lines(self):
+        for line in self.lines:
+            print line
+
     def find_crossings(self):
         self._algorithm.set_lines(self.lines)
         self._algorithm.find_crossings()
@@ -88,9 +86,6 @@ class Solver(object):
     def is_crossing(self):
         self._algorithm.set_lines(self.lines)
         # print self._algorithm.is_crossing()
-
-    def add_stretch(self, x1, y1, x2, y2):
-        self.lines.append(Stretch(Point(float(x1), float(y1)), Point(float(x2), float(y2))))
 
     def help(self):
         print self.help_str

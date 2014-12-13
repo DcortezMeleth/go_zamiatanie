@@ -603,11 +603,12 @@ class Circle(Oval):
         
     def getRadius(self):
         return self.radius
-              
+
+
 class Line(_BBox):
     
     def __init__(self, p1, p2):
-        _BBox.__init__(self, p1, p2, ["arrow","fill","width"])
+        _BBox.__init__(self, p1, p2, ["arrow", "fill", "width"])
         self.setFill(DEFAULT_CONFIG['outline'])
         self.setOutline = self.setFill
    
