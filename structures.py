@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 import numpy.linalg as la
+
 import graphics
+
 
 __author__ = 'Bartosz'
 # TODO: Napisac na SO, dlaczego z tym Point tak dziwnie to dziala
@@ -61,17 +63,26 @@ class Broom(object):
         self.lines[i1], self.lines[i2] = self.lines[i2], self.lines[i1]
 
     def insert(self, s):
-        y = s.get_y(self.x)
-        i = 0
-        while self.lines[i].get_y(self.x) > y:
-            i += 1
-        self.lines.insert(i, s)
+        try:
+            y = s.get_y(self.x)
+            i = 0
+            while self.lines[i].get_y(self.x) > y:
+                i += 1
+            self.lines.insert(i, s)
+        except IndexError:
+            self.lines.append(s)
 
     def remove(self, s):
         self.lines.remove(s)
 
     def next(self, s):
-        return self.lines[self.lines.index(s) + 1]
+        try:
+            return self.lines[self.lines.index(s) + 1]
+        except IndexError:
+            return None
 
     def prev(self, s):
-        return self.lines[self.lines.index(s) - 1]
+        try:
+            return self.lines[self.lines.index(s) - 1] if self.lines.index(s) - 1 >= 0 else None
+        except IndexError:
+            return None

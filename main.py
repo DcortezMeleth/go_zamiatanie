@@ -1,11 +1,9 @@
 # -*- coding: UTF-8 -*-
 import sys
-import pickle
 import traceback
-import json
+
 import graphics
 import structures
-
 from algorithms import SweepingAlgorithm
 
 
@@ -13,9 +11,6 @@ __author__ = 'Bartosz'
 
 
 class Solver(object):
-    FILE_NAME = "stretches.dat"
-    RESULT_FILE_NAME = "result.dat"
-
     help_str = "Program usage:\n  " \
                "set_lines - set lines for solver\n  " \
                "is_crossing - check if at least one crossing occurs\n  " \
@@ -51,6 +46,7 @@ class Solver(object):
             print 'Error: occurred', e
 
     def set_lines(self):
+        self.clean()
         p1 = None
         win = graphics.GraphWin("", 800, 600)
         while win.isOpen():
@@ -79,13 +75,13 @@ class Solver(object):
 
     def find_crossings(self):
         self._algorithm.set_lines(self.lines)
-        self._algorithm.find_crossings()
-        for elem in self._algorithm.get_result():
-            print "Point: {0} Stretches: {1} {2}".format(*elem)
+        result = self._algorithm.find_crossings()
+        for point in result:
+            print point, point.swap[0], point.swap[1]
 
     def is_crossing(self):
         self._algorithm.set_lines(self.lines)
-        # print self._algorithm.is_crossing()
+        print self._algorithm.is_crossing()
 
     def help(self):
         print self.help_str

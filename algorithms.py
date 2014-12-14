@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
-from itertools import combinations
 
 import numpy.linalg
 from numpy.linalg import LinAlgError
 
 import structures
+
 
 __author__ = 'Bartosz'
 
@@ -87,7 +87,7 @@ class SweepingAlgorithm(object):
 
     def add_point(self, point):
         i = 0
-        while self._points.x < point.x:
+        while self._points[i].x < point.x:
             i += 1
         self._points.insert(i, point)
 
@@ -97,5 +97,3 @@ class SweepingAlgorithm(object):
         for line in lines:
             points.extend([line.left, line.right])
         self._points = sorted(points, key=lambda p: p.x)
-        for point in self._points:
-            print point
