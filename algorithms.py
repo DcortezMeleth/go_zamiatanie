@@ -59,6 +59,20 @@ class SweepingAlgorithm(object):
             # = gdy to poczatek odcinka
             if point.swap:
                 self._broom.swap(*point.swap)
+                if self._broom.lines.index(point.swap[0]) > self._broom.lines.index(point.swap[1]):
+                    point.swap[0], point.swap[1] = point.swap[1], point.swap[0]
+                s1 = self._broom.prev(point.swap[0])
+                s2 = self._broom.next(point.swap[1])
+                if s1:
+                    cross = are_crossing(point.swap[0], s1)
+                    if cross:
+                        self._result.append(cross)
+                        self.add_point(cross)
+                if s2:
+                    cross = are_crossing(point.swap[1], s2)
+                    if cross:
+                        self._result.append(cross)
+                        self.add_point(cross)
             elif point == s.left:
                 self._broom.insert(s)
                 s1 = self._broom.prev(s)
