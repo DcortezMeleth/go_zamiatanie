@@ -2,6 +2,7 @@
 
 import numpy.linalg
 from numpy.linalg import LinAlgError
+import graphics
 
 import structures
 
@@ -52,9 +53,22 @@ class SweepingAlgorithm(object):
                 self._broom.remove(s)
         return False
 
+    def callback(self, point):
+        self._result.append(point)
+        self.add_point(point)
+        point.swap[0].setFill('red')
+        point.swap[1].setFill('red')
+
     def find_crossings(self):
+        win = graphics.GraphWin("go_zamiatanie", 800, 600)
+        for line in self._lines:
+            line.draw(win)
         for point in self._points:
             self._broom.x = point.x
+            broom = graphics.Line(graphics.Point(point.x, 0), graphics.Point(point.x, 600))
+            broom.setFill('green')
+            broom.draw(win)
+            win.getMouse()
             s = point.line
             # = gdy to poczatek odcinka
             if point.swap:
@@ -66,13 +80,11 @@ class SweepingAlgorithm(object):
                 if s1:
                     cross = are_crossing(point.swap[0], s1)
                     if cross:
-                        self._result.append(cross)
-                        self.add_point(cross)
+                        self.callback(cross)
                 if s2:
                     cross = are_crossing(point.swap[1], s2)
                     if cross:
-                        self._result.append(cross)
-                        self.add_point(cross)
+                        self.callback(cross)
             elif point == s.left:
                 self._broom.insert(s)
                 s1 = self._broom.prev(s)
@@ -80,13 +92,11 @@ class SweepingAlgorithm(object):
                 if s1:
                     cross = are_crossing(s, s1)
                     if cross:
-                        self._result.append(cross)
-                        self.add_point(cross)
+                        self.callback(cross)
                 if s2:
                     cross = are_crossing(s, s2)
                     if cross:
-                        self._result.append(cross)
-                        self.add_point(cross)
+                        self.callback(cross)
             # gdy koniec odcinka
             else:
                 s1 = self._broom.prev(s)
@@ -94,9 +104,11 @@ class SweepingAlgorithm(object):
                 if s1 and s2:
                     cross = are_crossing(s1, s2)
                     if cross:
-                        self._result.append(cross)
-                        self.add_point(cross)
+                        self.callback(cross)
                 self._broom.remove(s)
+            broom.undraw()
+        win.getMouse()
+        win.close()
         return self._result
 
     def add_point(self, point):
