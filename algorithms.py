@@ -53,11 +53,18 @@ class SweepingAlgorithm(object):
                 self._broom.remove(s)
         return False
 
+    def in_result(self, point2):
+        for point in self._result:
+            if point.swap[0] in point2.swap and point.swap[1] in point2.swap:
+                return True
+        return False
+
     def callback(self, point):
-        self._result.append(point)
-        self.add_point(point)
-        point.swap[0].setFill('red')
-        point.swap[1].setFill('red')
+        if not self.in_result(point):
+            self._result.append(point)
+            self.add_point(point)
+            point.swap[0].setFill('red')
+            point.swap[1].setFill('red')
 
     def find_crossings(self):
         win = graphics.GraphWin("go_zamiatanie", 800, 600)
@@ -68,9 +75,8 @@ class SweepingAlgorithm(object):
             broom = graphics.Line(graphics.Point(point.x, 0), graphics.Point(point.x, 600))
             broom.setFill('green')
             broom.draw(win)
-            win.getMouse()
             s = point.line
-            # = gdy to poczatek odcinka
+            # gdy to przeciecie
             if point.swap:
                 self._broom.swap(*point.swap)
                 if self._broom.lines.index(point.swap[0]) > self._broom.lines.index(point.swap[1]):
@@ -85,6 +91,7 @@ class SweepingAlgorithm(object):
                     cross = are_crossing(point.swap[1], s2)
                     if cross:
                         self.callback(cross)
+            # = gdy to poczatek odcinka
             elif point == s.left:
                 self._broom.insert(s)
                 s1 = self._broom.prev(s)
@@ -106,6 +113,7 @@ class SweepingAlgorithm(object):
                     if cross:
                         self.callback(cross)
                 self._broom.remove(s)
+            win.getMouse()
             broom.undraw()
         win.getMouse()
         win.close()

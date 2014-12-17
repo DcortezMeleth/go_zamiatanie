@@ -76,6 +76,8 @@ class Solver(object):
     def find_crossings(self):
         self._algorithm.set_lines(self.lines)
         result = self._algorithm.find_crossings()
+        for point in result:
+            print point
 
     def is_crossing(self):
         self._algorithm.set_lines(self.lines)
